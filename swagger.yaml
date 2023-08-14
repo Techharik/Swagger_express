@@ -1,1 +1,61 @@
 openapi: 3.0.0
+
+info:
+  title: My First API Docs
+  description: Learning about the swagge Api documentation  - [Hari Prasath.K].
+  version: 1.0.1
+
+
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Local host version of our App
+  - url: http://localhost:4000/api/v1
+    description: Dummy Api Url
+
+components:
+  securitySchemes:
+    BasicAuth:
+      type: http
+      scheme: basic
+    bearerAuth:            
+      type: http
+      scheme: bearer
+
+paths:
+  /insta:
+    get:
+     summary: return username, followers and follows
+     responses: 
+         '200': # status code
+           description: return a objects
+           content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                  username:
+                    type: string
+                  followers:
+                    type: number
+                  follows:
+                    type: number
+  /{token}:
+    get:
+     summary: return the params in the url
+     parameters:
+      - name: token         #remeber - is important
+        default: 4
+        in: path
+        schema: 
+         type: string
+     responses: 
+         '200': # status code
+           description: return a objects
+           content:
+            application/json:
+              schema:
+               type: object
+               properties:
+                  params:
+                    type: string
+                  

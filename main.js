@@ -18,8 +18,24 @@ const PORT = 4000 || process.env.PORT;
 
 
 
-app.get('/',(req,res)=>{
+app.get('/api/v1',(req,res)=>{
     res.send('Hello world')
+})
+
+app.get('/api/v1/insta',(req,res)=>{
+    const instaInfo ={
+        name : 'Hari',
+        followers: 56,
+        follows:42
+    }
+
+    res.status(200).json(instaInfo)
+})
+
+app.get('/api/v1/:token',(req,res)=>{
+      
+    const token = req.params.token
+    res.status(200).json({params:token})
 })
 
 
