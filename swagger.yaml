@@ -1,61 +1,255 @@
-openapi: 3.0.0
+openapi: '3.0.0'
 
 info:
-  title: My First API Docs
-  description: Learning about the swagge Api documentation  - [Hari Prasath.K].
-  version: 1.0.1
+ title: My First Docs Application
+ description: Learning About the writting documention with swagger
+ version: 1.0.0
+ contact: 
+  email: Khariprasath30@gmail.com
+  url: "techharik.in"
 
+# servers:
+#   - url: "https://localhost:4000/api/v1"
+#     description: Localhost Url
+#   - url: "https://localhost:4000/api/v2"
+#     description: Localhost Url for test server
 
 servers:
-  - url: http://localhost:4000/api/v1
-    description: Local host version of our App
-  - url: http://localhost:4000/api/v1
-    description: Dummy Api Url
+  - url: "{protocol}://localhost:4000/api/{version}"
+    description: Localhost Url
+    variables:
+      version:
+         enum:  # giving the option for your varibles
+          - v1
+          - v2
+         default: v1
+      protocol:
+          enum:
+           - http
+           - https
+          default: http
+
 
 components:
   securitySchemes:
-    BasicAuth:
-      type: http
-      scheme: basic
-    bearerAuth:            
-      type: http
-      scheme: bearer
+   cookieAuth:
+     type: apiKey
+     in: cookie
+     name: token
+   BearerAuth:
+     type: http
+     scheme: bearer
 
 paths:
-  /insta:
-    get:
-     summary: return username, followers and follows
-     responses: 
-         '200': # status code
-           description: return a objects
-           content:
-            application/json:
-              schema:
+ /lco:
+   get:
+     tags:
+       - String
+     summary: return a greet msg from a lcp
+     responses:
+       200:
+         description: All good and success
+         content:
+           application/json:
+             schema:
+               type: string
+               example: Hello everyone
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+ /lcoobj:
+   get:
+     tags:
+       - Object
+     summary: return course object
+     responses:
+       200:
+         description: All good and success
+         content:
+           application/json:
+             schema:
                type: object
+               example: {'id':'55'}
                properties:
-                  username:
+                id:
+                 type: string
+                title:
+                 type: string
+                price:
+                 type: number
+                   
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+ /courses:
+   get:
+     tags:
+       - Lists
+     summary: return  All the courses in the Appications
+     responses:
+       200:
+         description: getting all the courses from the list
+         content:
+           application/json:
+             schema:
+               type: array
+               example: [{},{},{}]
+               items: 
+                 type: object
+                 properties:
+                  id:
                     type: string
-                  followers:
+                  title:
+                    type: string
+                  price:
                     type: number
-                  follows:
-                    type: number
-  /{token}:
-    get:
-     summary: return the params in the url
+                   
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+
+ /mycourses/{courseId}:
+   get:
+     tags:
+       - String
+     summary: return courses based on Id
      parameters:
-      - name: token         #remeber - is important
-        default: 4
-        in: path
-        schema: 
+      - name : courseId
+        in   : path
+        required: true
+        default : 55
+        schema :
          type: string
-     responses: 
-         '200': # status code
-           description: return a objects
-           content:
-            application/json:
-              schema:
-               type: object
-               properties:
-                  params:
+
+     responses:
+       200:
+         description: getting one courses from the filtered Id
+         content:
+           application/json:
+             schema:
+                 type: object
+                 properties:
+                  id:
                     type: string
-                  
+                  title:
+                    type: string
+                  price:
+                    type: number
+                   
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+
+ /addCourses:
+   post:
+     tags:
+       - String
+     summary: adds a new courses to the existing courses
+     consumes: 
+      - application/json
+     produces:
+      - application/json
+
+     requestBody:
+       required: true
+       content: 
+         application/json:
+            schema:
+                 type: object
+                 properties:
+                    id:
+                      type: string
+                    title:
+                      type: string
+                    price:
+                      type: number
+
+     responses:
+       200:
+         description: getting one courses from the filtered Id
+         content:
+           application/json:
+             schema:
+                 type: boolean
+                 
+                   
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+
+ /courseQuery:
+   get:
+     tags:
+       - String
+     summary: Searching for a particular Query Elements
+     
+     parameters:
+      - name : location
+        in   : query
+        required: true
+        schema :
+         type: string
+         enum: ['tamilnadu', 'Kerala']
+
+
+     responses:
+       200:
+         description: Getting the query from the path
+         content:
+           application/json:
+             schema:
+                 type: object
+                 properties:
+                  location:
+                     type : string
+                 
+                   
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+
+
+ /addImages:
+   post:
+     tags:
+       - String
+     summary: Uploading a Images
+     parameters:
+       - in: header
+         name: auth
+
+     requestBody:
+      content:
+        multipart/form-data:
+            schema:
+                   type: object
+                   properties:
+                     file:
+                       type: string
+                       format: binary
+
+
+     responses:
+       200:
+         description: Getting the that is Uploaded
+           
+       400:
+          description: Bad Request
+       500:
+          description: Internal Server Error
+
+     
+
+     
